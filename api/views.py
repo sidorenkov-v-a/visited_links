@@ -87,5 +87,5 @@ class VisitedDomainsView(APIView):
             redis.zadd('links', {f'{link.domain}:{link.id}': link.timestamp})
 
 
-# def index(request):
-#     return redirect('visited_links')
+def index(request):
+    return redirect('visited_links')
