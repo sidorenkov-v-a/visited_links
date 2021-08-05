@@ -1,4 +1,5 @@
 from django.db import models
+from math import floor
 
 
 class VisitedLink(models.Model):
@@ -7,6 +8,4 @@ class VisitedLink(models.Model):
 
     @property
     def timestamp(self):
-        return int(self.date.timestamp())
-
-
+        return floor(self.date.timestamp())
