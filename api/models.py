@@ -4,7 +4,7 @@ from math import floor
 
 class VisitedLink(models.Model):
     domain = models.CharField(max_length=100)
-    date = models.DateTimeField(auto_now_add=True)
+    date = models.DateTimeField()
 
     @property
     def timestamp(self):
