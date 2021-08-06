@@ -1,12 +1,14 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from urllib.parse import urlparse
-from rest_framework.exceptions import ValidationError
-from .models import VisitedLink
 from datetime import datetime, timezone
+from urllib.parse import urlparse
+
 from django.conf import settings
 from django.shortcuts import redirect
 from redis import Redis
+from rest_framework.exceptions import ValidationError
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from .models import VisitedLink
 
 REDIS_HOST = settings.REDIS['default']['HOST']
 REDIS_PORT = settings.REDIS['default']['PORT']

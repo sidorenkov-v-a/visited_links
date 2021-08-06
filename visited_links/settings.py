@@ -1,4 +1,5 @@
 import os
+
 import environ
 
 env = environ.Env()
@@ -11,7 +12,6 @@ DEBUG = env.bool('DEBUG', False)
 
 ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1']
 ALLOWED_HOSTS += env.list('ALLOWED_HOSTS', default=[])
-
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -132,4 +132,3 @@ REDIS = {
 }
 
 REDIS['default'] = REDIS['develop' if DEBUG else 'production']
-
