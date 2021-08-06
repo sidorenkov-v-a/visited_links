@@ -9,4 +9,5 @@ def custom_exception_handler(exc, context):
         response.data.clear()
         response.data['status'] = 'error'
         response.data['details'] = data
+        response.data['status_code'] = response.status_code
     return response

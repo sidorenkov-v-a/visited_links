@@ -1,13 +1,14 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from urllib.parse import urlparse
-from rest_framework.exceptions import ValidationError
-from .models import VisitedLink
 from datetime import datetime, timezone
+from urllib.parse import urlparse
+
 from django.conf import settings
 from django.shortcuts import redirect
-
 from redis import Redis
+from rest_framework.exceptions import ValidationError
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from .models import VisitedLink
 
 REDIS_HOST = settings.REDIS['default']['HOST']
 REDIS_PORT = settings.REDIS['default']['PORT']
@@ -17,10 +18,10 @@ redis = Redis(host=REDIS_HOST, port=REDIS_PORT, db=0)
 class VisitedLinksView(APIView):
     def post(self, request):
         domains = self.parse_request(request)
+        now_date = datetime.now()
         for domain in domains:
-            link = VisitedLink.objects.create(domain=domain)
-
-            time_stamp = round(datetime.now().timestamp())
+            link = VisitedLink.objects.create(domain=domain, date=now_date)
+            time_stamp = link.timestamp
             redis.zadd('links', {f'{link.domain}:{link.id}': time_stamp})
         return Response({'status': 'ok'})
 
@@ -29,6 +30,10 @@ class VisitedLinksView(APIView):
             urls = request.data['links']
         except KeyError:
             raise ValidationError({'links': 'This field is required'})
+
+        if not isinstance(urls, list):
+            raise ValidationError({'links': 'This field should be list'})
+
         domains = set()
         for url in urls:
             parsed_uri = urlparse(url)
@@ -49,7 +54,7 @@ class VisitedDomainsView(APIView):
             links = self.get_from_db(date_from, date_to)
             self.update_cache(links)
             domains = links.distinct().values_list('domain', flat=True)
-
+        print(domains)
         return Response({'status': 'ok', 'domains': domains})
 
     def parse_request(self, request):

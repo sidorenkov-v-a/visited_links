@@ -1,5 +1,6 @@
 from django.urls import path
-from .views import VisitedLinksView, VisitedDomainsView, index
+
+from .views import VisitedDomainsView, VisitedLinksView, index
 
 urlpatterns = [
     path('visited_links/', VisitedLinksView.as_view(), name='visited_links'),
